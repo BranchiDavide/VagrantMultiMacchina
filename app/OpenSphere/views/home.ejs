@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - OpenSphere</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.ico">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    <div class="container mt-5">
+        <% if(session.successMsg) { %>
+            <div class="alert alert-success" role="alert">
+                <%= session.successMsg %>
+                <% session.successMsg = null %>
+            </div>
+        <% } %>
+        <h2 class="mb-4">All Posts</h2>
+        <div class="mt-4">
+            <% if (typeof session.userId !== 'undefined') { %>
+                <a href="/posts/create" class="btn btn-primary">Create a Post</a>
+            <% } else { %>
+                <button class="btn btn-secondary" disabled>To create a post you need to be logged in</button>
+            <% } %>
+        </div>
+        <br>
+        <div class="list-group">
+            <% if (posts.length > 0) { %>
+                <% posts.forEach(post => { %>
+                    <a href="/posts/<%= post.id %>" class="list-group-item list-group-item-action">
+                        <h5 class="mb-1"><%= post.title %></h5>
+                        <p class="mb-1"><%= post.content.substring(0, 100) %>...</p>
+                        <small>
+                            Posted by <%= post.author.username %> 
+                            on <%= new Date(post.createdAt).toLocaleString() %>
+                        </small>
+                    </a>
+                    <br>
+                <% }) %>
+            <% } else { %>
+                <p class="text-muted">No posts available yet.</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

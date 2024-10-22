@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Comment - OpenSphere</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.ico">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <div class="container mt-5">
+        <% if (session.successMsg) { %>
+            <div class="alert alert-success" role="alert">
+                <%= session.successMsg %>
+                <% session.successMsg = null %>
+            </div>
+        <% } %>
+        
+        <h1>Edit Comment</h1>
+
+        <form action="/comments/<%= comment.id %>/edit" method="POST">
+            <div class="form-group mb-3">
+                <label for="content">Comment Content</label>
+                <textarea class="form-control" id="content" name="content" rows="4" required><%= comment.content %></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Update Comment</button>
+            <a href="/posts/<%= comment.postId %>" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

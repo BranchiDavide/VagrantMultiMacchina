@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - OpenSphere</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.ico">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <div class="container mt-5">
+        <h1>Your Profile</h1>
+        <p><strong>Username:</strong> <%= user.username %></p>
+        <hr>
+        <a href="/profile/posts" class="btn btn-primary">Manage My Posts</a>
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+</body>
+</html>

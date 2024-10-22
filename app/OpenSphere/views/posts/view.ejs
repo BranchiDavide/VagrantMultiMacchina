@@ -1,0 +1,90 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post.title %> - OpenSphere</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.ico">
+    <style>
+        #commentForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <div class="container mt-5">
+        <% if(session.successMsg) { %>
+            <div class="alert alert-success" role="alert">
+                <%= session.successMsg %>
+                <% session.successMsg = null %>
+            </div>
+        <% } %>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <%= post.title %> 
+                    <% if (post.category.name) { %>
+                        <span class="badge bg-info ms-3" style="font-size: medium;"><%= post.category.name %></span>
+                    <% } %>
+                </h2>
+                <p class="card-text" style="white-space: pre-wrap;"><%= post.content %></p>
+                <p class="text-muted">
+                    Posted by <%= post.author.username %> on <%= new Date(post.createdAt).toLocaleString() %>
+                    <% if (post.updatedAt > post.createdAt) { %>
+                        <span class="badge bg-warning text-dark ms-2">
+                            Modified on <%= new Date(post.updatedAt).toLocaleString() %>
+                        </span>
+                    <% } %>
+                </p>
+            </div>
+        </div>
+
+        <h4>Comments <span class="badge bg-secondary"><%= post.comments.length %></span></h4>
+        <% if (typeof session.userId !== 'undefined') { %>
+            <button class="btn btn-primary" id="addCommentBtn">Add a comment</button>
+            <br>
+            <form action="/posts/<%= post.id %>/comment" id="commentForm" method="POST">
+                <div class="form-group">
+                    <label for="comment">Add a Comment:</label>
+                    <textarea class="form-control" id="comment" name="content" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+        <% } else { %>
+            <p class="text-muted">You need to <a href="/auth/login">login</a> to post a comment.</p>
+        <% } %>
+        <br>
+        <div class="list-group mb-4">
+            <% if (post.comments && post.comments.length > 0) { %>
+                <% post.comments.forEach(comment => { %>
+                    <div class="list-group-item">
+                        <p style="white-space: pre-wrap;"><%= comment.content %></p>
+                        <small class="text-muted">
+                            Commented by <%= comment.author.username %> on <%= new Date(comment.createdAt).toLocaleString() %>
+                            <% if (comment.updatedAt > comment.createdAt) { %>
+                                <span class="badge bg-warning text-dark ms-2">
+                                    Modified on <%= new Date(comment.updatedAt).toLocaleString() %>
+                                </span>
+                            <% } %>
+                        </small>
+                    </div>
+                    <br>
+                <% }) %>
+            <% } else { %>
+                <p class="text-muted">No comments yet. Be the first to comment!</p>
+            <% } %>
+        </div>
+    </div>
+    <script>
+        const addCommentBtn = document.getElementById("addCommentBtn");
+        const commentForm = document.getElementById("commentForm");
+        addCommentBtn.addEventListener("click", () => {
+            addCommentBtn.style.display = "none";
+            commentForm.style.display = "block";
+        });
+    </script>
+</body>
+</html>
